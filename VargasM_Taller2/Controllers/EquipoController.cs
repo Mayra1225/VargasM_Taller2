@@ -109,36 +109,31 @@ namespace VargasM_Taller2.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    var equipoExistente = await _context.Equipo.FindAsync(id);
+                var equipoExistente = await _context.Equipo.FindAsync(id);
 
-                    // Solo actualiza los campos deseados
-                    equipoExistente.PartidosJugados = equipo.PartidosJugados;
-                    equipoExistente.PartidosGanados = equipo.PartidosGanados;
-                    equipoExistente.PartidosEmpatados = equipo.PartidosEmpatados;
-                    equipoExistente.PartidosPerdidos = equipo.PartidosPerdidos;
+                // Solo actualiza los campos deseados
+                equipoExistente.PartidosJugados = equipo.PartidosJugados;
+                equipoExistente.PartidosGanados = equipo.PartidosGanados;
+                equipoExistente.PartidosEmpatados = equipo.PartidosEmpatados;
+                equipoExistente.PartidosPerdidos = equipo.PartidosPerdidos;
 
-                    _context.Update(equipoExistente);
-                    //_context.Update(equipo);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EquipoExists(equipo.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(equipoExistente);
+                await _context.SaveChangesAsync();
             }
-            return View(equipo);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EquipoExists(equipo.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Equipo/Delete/5

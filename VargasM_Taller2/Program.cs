@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using VargasM_Taller2.Data;
 namespace VargasM_Taller2
@@ -13,6 +14,16 @@ namespace VargasM_Taller2
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
+
+            var cultureInfo = new CultureInfo("es-ES");
+            cultureInfo.NumberFormat.CurrencyDecimalSeparator = ".";
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
             var app = builder.Build();
 

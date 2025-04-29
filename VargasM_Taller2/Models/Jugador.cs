@@ -16,8 +16,6 @@ namespace VargasM_Taller2.Models
         public int Goles { get; set; }
         [Range(0, 100)]
         public int Asistencias { get; set; }
-        [Range(0, 100)]
-        public int PartidosPerdidos { get; set; }
         [DataType(DataType.Currency)]
         [Range(0.0, 10000.0, ErrorMessage = "El saldo debe estar entre 0 y 10,000")]
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
