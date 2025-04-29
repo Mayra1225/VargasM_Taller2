@@ -20,3 +20,31 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+<style >
+.nav-animado {
+    transition: transform 0.3s ease, color 0.3s ease;
+    position: relative;
+}
+
+.nav-animado:hover {
+    color: #007bff !important; /* Cambia de color al pasar el mouse */
+    transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+}
+
+.nav-animado::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    left: 0;
+    bottom: 0;
+    background-color: #007bff;
+    transition: width 0.3s;
+}
+
+.nav-animado:hover::after {
+    width: 100%;
+}
+
+</style >

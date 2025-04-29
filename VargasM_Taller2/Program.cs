@@ -1,3 +1,6 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using VargasM_Taller2.Data;
 namespace VargasM_Taller2
 {
     public class Program
@@ -5,6 +8,8 @@ namespace VargasM_Taller2
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<VargasM_Taller2Context>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("VargasM_Taller2Context") ?? throw new InvalidOperationException("Connection string 'VargasM_Taller2Context' not found.")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
