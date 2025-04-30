@@ -19,6 +19,18 @@ namespace VargasM_Taller2.Controllers
             _context = context;
         }
 
+        private void ActualizarPresupuesto(int equipoId)
+        {
+            var equipo = _context.Equipo.Include(e => e.Jugadores)
+                                           .FirstOrDefault(e => e.Id == equipoId);
+
+            if (equipo != null)
+            {
+                equipo.Presupuesto = equipo.Jugadores.Sum(j => j.Sueldo);
+                _context.SaveChanges();
+            }
+        }
+
         // GET: Jugador
         public async Task<IActionResult> Index(int? equipoId)
         {
@@ -32,7 +44,7 @@ namespace VargasM_Taller2.Controllers
                 jugadores = jugadores.Where(j => j.EquipoId == equipoId);
             }
 
-            var jugadoresn = jugadores.OrderByDescending(item => item.Goles);
+            jugadores = jugadores.OrderByDescending(j => j.Goles);
 
             return View(await jugadores.ToListAsync());
         }
@@ -74,6 +86,7 @@ namespace VargasM_Taller2.Controllers
             {
                 _context.Add(jugador);
                 await _context.SaveChangesAsync();
+                ActualizarPresupuesto(jugador.EquipoId);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EquipoId"] = new SelectList(_context.Equipo, "Id", "Nombre", jugador.EquipoId);
@@ -114,6 +127,7 @@ namespace VargasM_Taller2.Controllers
                 try
                 {
                     _context.Update(jugador);
+                    ActualizarPresupuesto(jugador.EquipoId);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -161,6 +175,7 @@ namespace VargasM_Taller2.Controllers
             if (jugador != null)
             {
                 _context.Jugador.Remove(jugador);
+                ActualizarPresupuesto(jugador.EquipoId);
             }
 
             await _context.SaveChangesAsync();

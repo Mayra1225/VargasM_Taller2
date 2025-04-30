@@ -32,12 +32,23 @@ namespace VargasM_Taller2.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // Recupera los datos desde la base de datos
-
             var equiposEnBD = await _context.Equipo.ToListAsync();
             var equiposn = equiposEnBD.OrderByDescending(item => item.Puntos);
-            // Devuelve la vista con los equipos
+            ActualizarPresupuesto();
+
             return View(equiposn);
+        }
+
+        private void ActualizarPresupuesto()
+        {
+            var equipos = _context.Equipo.Include(e => e.Jugadores).ToList();
+
+            foreach (var equipo in equipos)
+            {
+                equipo.Presupuesto = equipo.Jugadores.Sum(j => j.Sueldo);
+            }
+
+            _context.SaveChanges();
         }
 
         // GET: Equipo/Details/5
@@ -88,7 +99,16 @@ namespace VargasM_Taller2.Controllers
                 return NotFound();
             }
 
-            var equipo = await _context.Equipo.FindAsync(id);
+            /*var equipo = await _context.Equipo.FindAsync(id);
+            if (equipo == null)
+            {
+                return NotFound();
+            }*/
+
+            var equipo = await _context.Equipo
+                .Include(e => e.Jugadores) // 👈 Incluimos la propiedad de navegación
+        .       FirstOrDefaultAsync(e => e.Id == id);
+
             if (equipo == null)
             {
                 return NotFound();

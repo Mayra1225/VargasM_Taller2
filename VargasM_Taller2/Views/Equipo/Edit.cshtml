@@ -20,13 +20,14 @@
     }
 </style>
 
-<h1>Información</h1>
+<h1 style="text-align: center;">Información</h1>
 
-<h4>@Model.Nombre</h4>
-<img src="@Model.LogoUrl" width="150" />
-<h6>Ciudad: @Model.Ciudad</h6>
-<h6>Estadio: @Model.Estadio</h6>
-<h6>Director Técnico: @Model.DT</h6>
+<h4 style="text-align: center;">@Model.Nombre</h4>
+<img src="@Model.LogoUrl" width="150" style="display: block; margin: 0 auto;" />
+<h6 style="text-align: center;">Ciudad: @Model.Ciudad</h6>
+<h6 style="text-align: center;">Estadio: @Model.Estadio</h6>
+<h6 style="text-align: center;">Director Técnico: @Model.DT</h6>
+<h6 style="text-align: center;">Presupuesto: $@Model.Presupuesto</h6>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -57,11 +58,8 @@
                 <label><strong>Puntos Totales (calculados):</strong></label>
                 <p id="puntosTotales" style="color: lightgreen; font-weight: bold;"></p>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-            </div>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+            
             <script>
                 function calcularPuntos() {
                     let ganados = parseInt($("#PartidosGanados").val()) || 0;
@@ -80,14 +78,48 @@
                     });
                 });
             </script>
-
         </form>
+    </div>
+    <div class="col-md-5">
+        Plantilla de Jugadores
+        @if (Model.Jugadores != null && Model.Jugadores.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Numero de Camiseta</th>
+                        <th>Goles</th>
+                        <th>Asistencias</th>
+                        <th>Sueldo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var jugador in Model.Jugadores)
+                    {
+                        <tr>
+                            <td>@jugador.Nombre</td>
+                            <td>@jugador.NumeroCamiseta</td>
+                            <td>@jugador.Goles</td>
+                            <td>@jugador.Asistencias</td>
+                            <td>@jugador.Sueldo.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Este equipo no tiene jugadores.</p>
+        }
+    </div>
+    <div class="form-group">
+        <a class="btn btn-outline-info" asp-action="Index">Back to List</a> |
+        <input type="submit" value="Guardar" class="btn btn-outline-primary" />
     </div>
 </div>
 
-<div>
-    <a class="btn btn-info text-white" asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -25,5 +25,11 @@ namespace VargasM_Taller2.Models
         public string Ciudad { get; set; }
         public string DT { get; set; }
         public string Estadio { get; set; }
+        [DataType(DataType.Currency)]
+        [Range(0.0, 10000.0, ErrorMessage = "El saldo debe estar entre 0 y 10,000")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal Presupuesto { get; set; }
+
+        public virtual ICollection<Jugador>? Jugadores { get; set; }
     }
 }
